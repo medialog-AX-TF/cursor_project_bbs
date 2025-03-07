@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>알림 - 커뮤니티 게시판</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      min-height: 100vh;
+      padding-top: 70px;
+    }
+    .notifications-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    .notification-item {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      transition: background-color 0.3s;
+    }
+    .notification-item:hover {
+      background-color: #f8f9fa;
+    }
+    .notification-item.unread {
+      border-left: 4px solid #0d6efd;
+    }
+    .notification-item .notification-time {
+      color: #6c757d;
+      font-size: 0.875rem;
+    }
+    .notification-item .notification-action {
+      color: #0d6efd;
+      text-decoration: none;
+    }
+    .notification-item .notification-action:hover {
+      text-decoration: underline;
+    }
+    .notification-item .notification-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #e9ecef;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #495057;
+    }
+    .notification-filters {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+  </style>
+</head>
+<body>
+  <!-- 네비게이션 바 -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">커뮤니티 게시판</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="board-list.html">게시판</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">인기 게시글</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">최근 게시글</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center">
+          <div class="dropdown">
+            <a class="text-white d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <img src="https://via.placeholder.com/32" alt="User" class="rounded-circle me-2">
+              <span>사용자</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i>프로필</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-bookmark me-2"></i>북마크</a></li>
+              <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>설정</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt me-2"></i>로그아웃</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 메인 컨텐츠 -->
+  <div class="notifications-container">
+    <!-- 알림 필터 -->
+    <div class="notification-filters">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">알림</h4>
+        <button class="btn btn-outline-primary btn-sm" onclick="markAllAsRead()">
+          모두 읽음 표시
+        </button>
+      </div>
+      <div class="btn-group" role="group">
+        <input type="radio" class="btn-check" name="notification-type" id="all" checked>
+        <label class="btn btn-outline-secondary" for="all">전체</label>
+        
+        <input type="radio" class="btn-check" name="notification-type" id="comments">
+        <label class="btn btn-outline-secondary" for="comments">댓글</label>
+        
+        <input type="radio" class="btn-check" name="notification-type" id="likes">
+        <label class="btn btn-outline-secondary" for="likes">추천</label>
+        
+        <input type="radio" class="btn-check" name="notification-type" id="mentions">
+        <label class="btn btn-outline-secondary" for="mentions">멘션</label>
+      </div>
+    </div>
+
+    <!-- 알림 목록 -->
+    <div class="notification-list">
+      <!-- 읽지 않은 알림 -->
+      <div class="notification-item unread">
+        <div class="d-flex">
+          <div class="notification-icon me-3">
+            <i class="fas fa-comment"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <strong>홍길동</strong>님이 회원님의 게시글에 댓글을 남겼습니다:
+                <span class="text-muted">"정말 좋은 정보 감사합니다!"</span>
+              </div>
+              <small class="notification-time">방금 전</small>
+            </div>
+            <div class="mt-2">
+              <a href="#" class="notification-action">게시글 보기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notification-item unread">
+        <div class="d-flex">
+          <div class="notification-icon me-3">
+            <i class="fas fa-heart"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <strong>김철수</strong>님 외 5명이 회원님의 게시글을 추천했습니다.
+              </div>
+              <small class="notification-time">10분 전</small>
+            </div>
+            <div class="mt-2">
+              <a href="#" class="notification-action">게시글 보기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 읽은 알림 -->
+      <div class="notification-item">
+        <div class="d-flex">
+          <div class="notification-icon me-3">
+            <i class="fas fa-at"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <strong>이영희</strong>님이 댓글에서 회원님을 멘션했습니다.
+              </div>
+              <small class="notification-time">1시간 전</small>
+            </div>
+            <div class="mt-2">
+              <a href="#" class="notification-action">댓글 보기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notification-item">
+        <div class="d-flex">
+          <div class="notification-icon me-3">
+            <i class="fas fa-comment"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <strong>박지민</strong>님이 회원님의 댓글에 답글을 남겼습니다:
+                <span class="text-muted">"저도 같은 생각입니다."</span>
+              </div>
+              <small class="notification-time">2시간 전</small>
+            </div>
+            <div class="mt-2">
+              <a href="#" class="notification-action">답글 보기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notification-item">
+        <div class="d-flex">
+          <div class="notification-icon me-3">
+            <i class="fas fa-heart"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <strong>최민수</strong>님이 회원님의 댓글을 추천했습니다.
+              </div>
+              <small class="notification-time">3시간 전</small>
+            </div>
+            <div class="mt-2">
+              <a href="#" class="notification-action">댓글 보기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <nav class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1">이전</a>
+        </li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#">다음</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="bg-dark text-white mt-5 py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>커뮤니티 게시판</h5>
+          <p class="small">다양한 주제에 대해 소통하는 공간입니다.</p>
+          <p class="small">© 2024 커뮤니티 게시판. All rights reserved.</p>
+        </div>
+        <div class="col-md-3">
+          <h5>바로가기</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none small">홈</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">게시판</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">인기 게시글</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">최근 게시글</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5>정보</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none small">이용약관</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">개인정보처리방침</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">문의하기</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 스크립트 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // 모든 알림을 읽음 표시
+    function markAllAsRead() {
+      document.querySelectorAll('.notification-item.unread').forEach(item => {
+        item.classList.remove('unread');
+      });
+      alert('모든 알림을 읽음 표시했습니다.');
+    }
+
+    // 알림 필터링
+    document.querySelectorAll('input[name="notification-type"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        // 실제 구현에서는 서버에 필터링된 알림을 요청
+        alert(`${this.id} 알림만 표시합니다.`);
+      });
+    });
+  </script>
+</body>
+</html> 

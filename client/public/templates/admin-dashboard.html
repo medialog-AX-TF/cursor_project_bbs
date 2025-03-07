@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 대시보드 - 커뮤니티 게시판</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      min-height: 100vh;
+    }
+    .admin-container {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #343a40;
+      color: #fff;
+      padding-top: 1rem;
+    }
+    .sidebar .nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      padding: 0.5rem 1rem;
+    }
+    .sidebar .nav-link:hover {
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .sidebar .nav-link.active {
+      color: #fff;
+      background-color: #0d6efd;
+    }
+    .sidebar .nav-link i {
+      width: 20px;
+      text-align: center;
+      margin-right: 0.5rem;
+    }
+    .main-content {
+      flex: 1;
+      padding: 1rem;
+    }
+    .stat-card {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .stat-card .icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .stat-card .value {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .stat-card .label {
+      color: #6c757d;
+      font-size: 0.875rem;
+    }
+    .chart-container {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .table-container {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .status-badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+    }
+    .status-active {
+      background-color: #198754;
+      color: #fff;
+    }
+    .status-inactive {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .status-pending {
+      background-color: #ffc107;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- 사이드바 -->
+    <div class="sidebar">
+      <div class="px-3 py-2">
+        <h5>관리자 대시보드</h5>
+      </div>
+      <ul class="nav flex-column mt-3">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">
+            <i class="fas fa-home"></i> 대시보드
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="fas fa-users"></i> 회원 관리
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="fas fa-clipboard"></i> 게시글 관리
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="fas fa-comments"></i> 댓글 관리
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="fas fa-flag"></i> 신고 관리
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="fas fa-cog"></i> 설정
+          </a>
+        </li>
+        <li class="nav-item mt-3">
+          <a class="nav-link text-danger" href="login.html">
+            <i class="fas fa-sign-out-alt"></i> 로그아웃
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 메인 컨텐츠 -->
+    <div class="main-content">
+      <div class="container-fluid">
+        <!-- 헤더 -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4>대시보드</h4>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary">
+              <i class="fas fa-download me-1"></i> 통계 내보내기
+            </button>
+            <button class="btn btn-primary">
+              <i class="fas fa-sync-alt me-1"></i> 새로고침
+            </button>
+          </div>
+        </div>
+
+        <!-- 통계 카드 -->
+        <div class="row">
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="icon text-primary">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="value">1,234</div>
+              <div class="label">총 회원수</div>
+              <div class="small text-success">
+                <i class="fas fa-arrow-up"></i> 전월 대비 5% 증가
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="icon text-success">
+                <i class="fas fa-clipboard"></i>
+              </div>
+              <div class="value">5,678</div>
+              <div class="label">총 게시글</div>
+              <div class="small text-success">
+                <i class="fas fa-arrow-up"></i> 전월 대비 8% 증가
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="icon text-info">
+                <i class="fas fa-comments"></i>
+              </div>
+              <div class="value">12,345</div>
+              <div class="label">총 댓글</div>
+              <div class="small text-success">
+                <i class="fas fa-arrow-up"></i> 전월 대비 12% 증가
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="icon text-warning">
+                <i class="fas fa-flag"></i>
+              </div>
+              <div class="value">23</div>
+              <div class="label">미처리 신고</div>
+              <div class="small text-danger">
+                <i class="fas fa-arrow-up"></i> 전일 대비 3건 증가
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 차트 -->
+        <div class="row mt-4">
+          <div class="col-md-8">
+            <div class="chart-container">
+              <h5 class="mb-4">월별 활동 통계</h5>
+              <canvas id="activityChart"></canvas>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="chart-container">
+              <h5 class="mb-4">게시판 별 게시글 분포</h5>
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- 최근 활동 -->
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <div class="table-container">
+              <h5 class="mb-4">최근 가입 회원</h5>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>회원명</th>
+                      <th>이메일</th>
+                      <th>가입일</th>
+                      <th>상태</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>홍길동</td>
+                      <td>hong@example.com</td>
+                      <td>2024-03-07</td>
+                      <td><span class="status-badge status-active">활성</span></td>
+                    </tr>
+                    <tr>
+                      <td>김철수</td>
+                      <td>kim@example.com</td>
+                      <td>2024-03-07</td>
+                      <td><span class="status-badge status-pending">대기</span></td>
+                    </tr>
+                    <tr>
+                      <td>이영희</td>
+                      <td>lee@example.com</td>
+                      <td>2024-03-06</td>
+                      <td><span class="status-badge status-active">활성</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="table-container">
+              <h5 class="mb-4">최근 신고 내역</h5>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>신고 대상</th>
+                      <th>신고 사유</th>
+                      <th>신고일</th>
+                      <th>상태</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>부적절한 게시글</td>
+                      <td>스팸 홍보</td>
+                      <td>2024-03-07</td>
+                      <td><span class="status-badge status-pending">처리중</span></td>
+                    </tr>
+                    <tr>
+                      <td>불건전 댓글</td>
+                      <td>욕설/비방</td>
+                      <td>2024-03-07</td>
+                      <td><span class="status-badge status-active">처리완료</span></td>
+                    </tr>
+                    <tr>
+                      <td>부적절한 게시글</td>
+                      <td>저작권 침해</td>
+                      <td>2024-03-06</td>
+                      <td><span class="status-badge status-pending">처리중</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 스크립트 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // 활동 통계 차트
+    const activityChart = new Chart(document.getElementById('activityChart'), {
+      type: 'line',
+      data: {
+        labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+        datasets: [{
+          label: '게시글',
+          data: [650, 590, 800, 810, 960, 870],
+          borderColor: '#0d6efd',
+          tension: 0.1
+        }, {
+          label: '댓글',
+          data: [1200, 1100, 1500, 1800, 2000, 1800],
+          borderColor: '#198754',
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          }
+        }
+      }
+    });
+
+    // 게시판 분포 차트
+    const categoryChart = new Chart(document.getElementById('categoryChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['자유게시판', '질문과답변', '정보공유', '공지사항'],
+        datasets: [{
+          data: [45, 25, 20, 10],
+          backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          }
+        }
+      }
+    });
+
+    // 새로고침 버튼 클릭 이벤트
+    document.querySelector('.btn-primary').addEventListener('click', function() {
+      // 데이터 새로고침 로직
+      // location.reload();
+    });
+
+    // 통계 내보내기 버튼 클릭 이벤트
+    document.querySelector('.btn-outline-secondary').addEventListener('click', function() {
+      // 통계 데이터 내보내기 로직
+      // window.print();
+    });
+  </script>
+</body>
+</html> 

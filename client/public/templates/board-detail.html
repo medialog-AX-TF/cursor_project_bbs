@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시글 상세 - 커뮤니티 게시판</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      min-height: 100vh;
+      padding-top: 70px;
+    }
+    .navbar-brand {
+      font-weight: 700;
+    }
+    .post-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    .post-header {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .post-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #343a40;
+      margin-bottom: 1rem;
+    }
+    .post-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .post-author {
+      display: flex;
+      align-items: center;
+    }
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 0.75rem;
+    }
+    .post-stats {
+      display: flex;
+      gap: 1rem;
+      color: #6c757d;
+    }
+    .post-content {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 2rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .post-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1rem 0;
+      padding: 1rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .comments-section {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .comment-form {
+      margin-bottom: 2rem;
+    }
+    .comment {
+      padding: 1rem 0;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .comment:last-child {
+      border-bottom: none;
+    }
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    .comment-author {
+      display: flex;
+      align-items: center;
+    }
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    .comment-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .category-badge {
+      background-color: #6c757d;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      margin-right: 0.5rem;
+    }
+    .reply-form {
+      margin-left: 2.5rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: #f8f9fa;
+      border-radius: 0.5rem;
+      display: none;
+    }
+    .reply {
+      margin-left: 2.5rem;
+      margin-top: 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid #dee2e6;
+    }
+  </style>
+</head>
+<body>
+  <!-- 네비게이션 바 -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">커뮤니티 게시판</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="board-list.html">게시판</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">인기 게시글</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">최근 게시글</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center">
+          <div class="dropdown">
+            <a class="text-white d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <img src="https://via.placeholder.com/32" alt="User" class="rounded-circle me-2">
+              <span>사용자</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>프로필</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-bookmark me-2"></i>북마크</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>설정</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt me-2"></i>로그아웃</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 메인 컨텐츠 -->
+  <div class="post-container">
+    <!-- 게시글 헤더 -->
+    <div class="post-header">
+      <div class="d-flex align-items-center mb-3">
+        <span class="category-badge">자유</span>
+        <h1 class="post-title mb-0">오늘 날씨가 정말 좋네요! 다들 주말 계획은 어떻게 되시나요?</h1>
+      </div>
+      <div class="post-info">
+        <div class="post-author">
+          <img src="https://via.placeholder.com/40" alt="Author" class="author-avatar">
+          <div>
+            <div class="fw-bold">홍길동</div>
+            <div class="text-muted small">2023-03-07 14:30</div>
+          </div>
+        </div>
+        <div class="post-stats">
+          <span><i class="fas fa-eye me-1"></i> 542</span>
+          <span><i class="fas fa-comment me-1"></i> 23</span>
+          <span><i class="fas fa-heart me-1"></i> 78</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 게시글 내용 -->
+    <div class="post-content">
+      <p>안녕하세요! 오늘은 날씨가 정말 좋네요.</p>
+      <p>이런 날씨에는 야외 활동이 딱인 것 같은데, 다들 주말 계획은 어떻게 되시나요?</p>
+      <p>저는 한강 공원에 가서 피크닉을 하려고 합니다. 맛있는 도시락도 준비하고, 책도 몇 권 가져가서 여유롭게 시간을 보내려고요.</p>
+      <p>혹시 추천하고 싶은 주말 나들이 장소가 있다면 공유해주세요!</p>
+      <div class="mt-4">
+        <img src="https://via.placeholder.com/800x400" alt="한강 공원" class="img-fluid rounded">
+        <p class="text-muted small mt-2">한강 공원 전경</p>
+      </div>
+    </div>
+
+    <!-- 게시글 액션 -->
+    <div class="post-actions">
+      <div class="action-buttons">
+        <button class="btn btn-outline-primary">
+          <i class="fas fa-heart me-1"></i> 좋아요
+        </button>
+        <button class="btn btn-outline-secondary">
+          <i class="fas fa-bookmark me-1"></i> 북마크
+        </button>
+        <button class="btn btn-outline-secondary">
+          <i class="fas fa-share me-1"></i> 공유
+        </button>
+      </div>
+      <div class="action-buttons">
+        <button class="btn btn-outline-secondary">
+          <i class="fas fa-edit me-1"></i> 수정
+        </button>
+        <button class="btn btn-outline-danger">
+          <i class="fas fa-trash me-1"></i> 삭제
+        </button>
+      </div>
+    </div>
+
+    <!-- 댓글 섹션 -->
+    <div class="comments-section">
+      <h3 class="mb-4">댓글 23개</h3>
+      
+      <!-- 댓글 작성 폼 -->
+      <div class="comment-form">
+        <form>
+          <div class="mb-3">
+            <textarea class="form-control" rows="3" placeholder="댓글을 작성해주세요"></textarea>
+          </div>
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary">댓글 작성</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 댓글 목록 -->
+      <div class="comments-list">
+        <!-- 댓글 1 -->
+        <div class="comment">
+          <div class="comment-header">
+            <div class="comment-author">
+              <img src="https://via.placeholder.com/32" alt="Commenter" class="comment-avatar">
+              <div>
+                <div class="fw-bold">이순신</div>
+                <div class="text-muted small">2023-03-07 15:00</div>
+              </div>
+            </div>
+            <div class="comment-actions">
+              <button class="btn btn-sm btn-link text-decoration-none">답글</button>
+              <button class="btn btn-sm btn-link text-decoration-none">수정</button>
+              <button class="btn btn-sm btn-link text-decoration-none text-danger">삭제</button>
+            </div>
+          </div>
+          <div class="comment-content mt-2">
+            <p>저도 이번 주말에 한강 가려고 했는데, 같은 생각을 하셨네요! 여의도 한강공원이 요즘 벚꽃이 예쁘다고 하던데 한번 가보시는 건 어떨까요?</p>
+          </div>
+          
+          <!-- 답글 작성 폼 -->
+          <div class="reply-form" id="reply-form-1">
+            <form>
+              <div class="mb-3">
+                <textarea class="form-control" rows="2" placeholder="답글을 작성해주세요"></textarea>
+              </div>
+              <div class="text-end">
+                <button type="button" class="btn btn-secondary btn-sm me-2">취소</button>
+                <button type="submit" class="btn btn-primary btn-sm">답글 작성</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- 답글 -->
+          <div class="reply">
+            <div class="comment-header">
+              <div class="comment-author">
+                <img src="https://via.placeholder.com/32" alt="Replier" class="comment-avatar">
+                <div>
+                  <div class="fw-bold">홍길동</div>
+                  <div class="text-muted small">2023-03-07 15:15</div>
+                </div>
+              </div>
+              <div class="comment-actions">
+                <button class="btn btn-sm btn-link text-decoration-none">수정</button>
+                <button class="btn btn-sm btn-link text-decoration-none text-danger">삭제</button>
+              </div>
+            </div>
+            <div class="comment-content mt-2">
+              <p>좋은 제안 감사합니다! 여의도 쪽으로 가보도록 할게요 😊</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 댓글 2 -->
+        <div class="comment">
+          <div class="comment-header">
+            <div class="comment-author">
+              <img src="https://via.placeholder.com/32" alt="Commenter" class="comment-avatar">
+              <div>
+                <div class="fw-bold">김유신</div>
+                <div class="text-muted small">2023-03-07 15:30</div>
+              </div>
+            </div>
+            <div class="comment-actions">
+              <button class="btn btn-sm btn-link text-decoration-none">답글</button>
+              <button class="btn btn-sm btn-link text-decoration-none">수정</button>
+              <button class="btn btn-sm btn-link text-decoration-none text-danger">삭제</button>
+            </div>
+          </div>
+          <div class="comment-content mt-2">
+            <p>날씨가 좋으니 남산 둘레길도 추천드립니다. 요즘 꽃도 피고 전망도 좋아요!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 페이지네이션 -->
+      <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">이전</a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">다음</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="bg-dark text-white mt-5 py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>커뮤니티 게시판</h5>
+          <p class="small">다양한 주제에 대해 소통하는 공간입니다.</p>
+          <p class="small">© 2023 커뮤니티 게시판. All rights reserved.</p>
+        </div>
+        <div class="col-md-3">
+          <h5>바로가기</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none small">홈</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">게시판</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">인기 게시글</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">최근 게시글</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5>정보</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none small">이용약관</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">개인정보처리방침</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">문의하기</a></li>
+            <li><a href="#" class="text-white text-decoration-none small">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // 답글 폼 토글
+    document.querySelectorAll('.comment-actions .btn-link').forEach(button => {
+      button.addEventListener('click', function() {
+        if (this.textContent.trim() === '답글') {
+          const comment = this.closest('.comment');
+          const replyForm = comment.querySelector('.reply-form');
+          replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+        }
+      });
+    });
+
+    // 답글 폼 취소
+    document.querySelectorAll('.reply-form .btn-secondary').forEach(button => {
+      button.addEventListener('click', function() {
+        this.closest('.reply-form').style.display = 'none';
+      });
+    });
+  </script>
+</body>
+</html> 
