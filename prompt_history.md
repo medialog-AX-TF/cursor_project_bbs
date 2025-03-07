@@ -17,4 +17,9 @@
 ### 2023-03-07 - 기술 스택 및 GitHub 저장소 정보 업데이트
 ```
 기술스택은 프론트 React 백앤드 스프링부트 DB는 PostgreSQL 입니다. DATABASE_URL=\"postgresql://root:****@localhost:5432/bbs" 깃허브 저장소는 @https://github.com/medialog-AX-TF/cursor_project_bbs 입니다. 주기적으로 커밋과 푸시를 해 주세요
+```
+
+### 2023-03-07 - WBS 작성 요청
+```
+리드미와 요구사항 파일 기준으로 WBS 파일을 작성해주세요
 ``` 
